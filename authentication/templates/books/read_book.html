@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Mode PDF Viewer</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Header */
+        .header {
+            padding: 15px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        /* PDF Viewer Container */
+        .pdf-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            padding: 20px;
+        }
+
+        iframe {
+            filter: invert(1) hue-rotate(180deg);
+            width: 80%;
+            height: 80vh;
+            border: 2px solid #333;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Full-Screen Mode */
+        .fullscreen {
+            width: 100vw !important;
+            height: 100vh !important;
+            border: none !important;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        /* Button Styles */
+        .btn-container {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #1e88e5;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #1565c0;
+        }
+
+        /* Exit button is hidden until full-screen is active */
+        .btn#exit-btn {
+            display: none;
+        }
+
+        /* Show exit button only in full-screen mode */
+        .fullscreen-mode #exit-btn {
+            display: inline-block;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">📖 Reading: {{ book.title }}</div>
+
+    <div class="pdf-container">
+        <iframe id="pdf-frame" src="{{ book.pdf.url }}"></iframe>
+    </div>
+
+    <div class="btn-container">
+        <button class="btn" id="fullscreen-btn" onclick="toggleFullScreen()">🔲 Full Screen</button>
+        <button class="btn" id="exit-btn" onclick="exitFullScreen()">❌ Exit Full Screen</button>
+    </div>
+
+    <script>
+        let isFullScreen = false;
+
+        function toggleFullScreen() {
+            var iframe = document.getElementById("pdf-frame");
+            var body = document.body;
+
+            if (!document.fullscreenElement) {
+                iframe.classList.add("fullscreen");
+                body.classList.add("fullscreen-mode"); // Show exit button
+                document.documentElement.requestFullscreen();
+                isFullScreen = true;
+            } else {
+                exitFullScreen();
+            }
+        }
+
+        function exitFullScreen() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen();
+            }
+            document.getElementById("pdf-frame").classList.remove("fullscreen");
+            document.body.classList.remove("fullscreen-mode"); // Hide exit button
+            isFullScreen = false;
+        }
+
+        // Exit fullscreen on 'Escape' key
+        document.addEventListener("keydown", function(event) {
+            if (event.key === "Escape" && isFullScreen) {
+                exitFullScreen();
+            }
+        });
+    </script>
+
+</body>
+</html>

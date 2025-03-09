@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Book</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
+        }
+
+        .container {
+            width: 550px;
+            background: #fff;
+            padding: 35px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h2, h3 {
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .form-group {
+            width: 100%;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        label {
+            font-weight: 500;
+            color: #555;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+
+        .custom-file-upload {
+            display: inline-block;
+            padding: 12px 20px;
+            cursor: pointer;
+            border: 2px solid #7494ec;
+            background: #fff;
+            color: #7494ec;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: 0.3s;
+            text-align: center;
+            width: 100%;
+        }
+
+        .custom-file-upload:hover {
+            background: #7494ec;
+            color: #fff;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            background: #7494ec;
+            color: #fff;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5679f2;
+            box-shadow: 0 0 10px rgba(116, 148, 236, 0.8);
+        }
+
+        ul {
+            margin-top: 20px;
+            padding: 0;
+            list-style: none;
+        }
+
+        ul li a {
+            text-decoration: none;
+            color: #007aff;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #ff3b30;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Upload a Book</h2>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="book-title">Book Title</label>
+                <input type="text" id="book-title" name="title" required>
+            </div>
+            <div class="form-group">
+                <label for="file-upload" class="custom-file-upload">Choose a File</label>
+                <input id="file-upload" type="file" name="pdf" required>
+            </div>
+            <button type="submit">Upload</button>
+        </form>
+
+        <h3>Uploaded Books</h3>
+        <ul>
+            {% for book in books %}
+                <li><a href="{{ book.pdf.url }}" target="_blank">{{ book.title }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <a href="{% url 'authentication:book_list' %}" class="back-link">View All Books</a>
+    </div>
+
+    <script>
+        document.querySelector("#file-upload").addEventListener("change", function() {
+            let fileName = this.files[0] ? this.files[0].name : "Choose a File";
+            document.querySelector(".custom-file-upload").textContent = fileName;
+        });
+    </script>
+</body>
+</html>

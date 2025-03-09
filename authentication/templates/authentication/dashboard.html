@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(90deg, #e2e2e2, #c9d6ff);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .dashboard {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .user-info {
+            margin-bottom: 30px;
+        }
+        .btn {
+            background: #7494ec;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+        }
+        .messages {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        .message {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            color: white;
+            background: #333;
+        }
+        .message.success {
+            background: #4CAF50;
+        }
+        .message.error {
+            background: #F44336;
+        }
+    </style>
+</head>
+<body>
+    {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="dashboard">
+        <h1>Welcome to Your Dashboard</h1>
+        <div class="user-info">
+            <p>Hello, <strong>{{ user.username }}</strong>!</p>
+            <p>Email: {{ user.email }}</p>
+        </div>
+        <a href="{% url 'authentication:logout' %}" class="btn">Logout</a>
+        <a href="{% url 'authentication:upload_book' %}" class="btn">Upload Books</a>
+    </div>
+</body>
+</html>

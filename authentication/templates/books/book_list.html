@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select a Book</title>
+    <style>
+        body {
+            background-color: #121212;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        a {
+            color: #1e90ff;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        a:hover {
+            color: #ffcc00;
+        }
+
+        .book-list {
+            margin: 50px auto;
+            max-width: 600px;
+            padding: 20px;
+            background-color: #1e1e1e;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <h2>Select a Book to Read</h2>
+
+    <div class="book-list">
+        {% if books %}
+            {% for book in books %}
+                <p><a href="{% url 'authentication:read_book' book.id %}">{{ book.title }}</a></p>
+            {% endfor %}
+        {% else %}
+            <p>No books uploaded yet.</p>
+        {% endif %}
+    </div>
+
+    <br>
+    <a href="{% url 'authentication:upload_book' %}">Upload a new book</a>
+</body>
+</html>
